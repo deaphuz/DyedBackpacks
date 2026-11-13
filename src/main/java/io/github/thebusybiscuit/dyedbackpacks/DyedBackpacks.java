@@ -3,19 +3,19 @@ package io.github.thebusybiscuit.dyedbackpacks;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bstats.bukkit.Metrics;
-import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
-import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
-import io.github.thebusybiscuit.slimefun4.api.researches.Research;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.config.Config;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.skins.PlayerHead;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.skins.PlayerSkin;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.updater.GitHubBuildsUpdater;
+import io.github.thebusybiscuit.slimefun5.api.SlimefunAddon;
+import io.github.thebusybiscuit.slimefun5.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun5.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun5.api.researches.Research;
+import io.github.thebusybiscuit.slimefun5.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun5.libraries.dough.config.Config;
+import io.github.thebusybiscuit.slimefun5.libraries.dough.items.CustomItemStack;
+import io.github.thebusybiscuit.slimefun5.libraries.dough.items.ItemMetaSnapshot;
+import io.github.thebusybiscuit.slimefun5.libraries.keys.NamespacedKey;
+import io.github.thebusybiscuit.slimefun5.libraries.dough.updater.GitHubBuildsUpdater;
+import io.github.thebusybiscuit.slimefun5.utils.SlimefunUtils;
 
 /**
  * This is the main class of the {@link DyedBackpacks} addon.
@@ -38,7 +38,7 @@ public class DyedBackpacks extends JavaPlugin implements SlimefunAddon {
         }
 
         Research research = new Research(new NamespacedKey(this, "dyed_backpacks"), 17200, "Dyed Backpacks", 24);
-        ItemGroup itemGroup = new ItemGroup(new NamespacedKey(this, "dyed_backpacks"), new CustomItemStack(PlayerHead.getItemStack(PlayerSkin.fromHashCode(BackpackColor.RED.getTexture())), "&4Dyed Backpacks"), 2);
+        ItemGroup itemGroup = new ItemGroup(new NamespacedKey(this, "dyed_backpacks"), CustomItemStack.create(SlimefunUtils.getCustomHead(BackpackColor.RED.getTexture()), "&4Dyed Backpacks"), 2);
 
         if (cfg.getBoolean("backpacks.small")) {
             createBackpacks(itemGroup, research, SlimefunItems.BACKPACK_SMALL, 9);
@@ -65,7 +65,11 @@ public class DyedBackpacks extends JavaPlugin implements SlimefunAddon {
     @ParametersAreNonnullByDefault
     private void createBackpacks(ItemGroup itemGroup, Research research, SlimefunItemStack backpack, int size) {
         for (BackpackColor color : BackpackColor.values()) {
-            SlimefunItemStack item = new SlimefunItemStack("DYED_" + backpack.getItemId() + "_" + color.name(), color.getTexture(), backpack.getItemMeta().getDisplayName() + " &7(" + color.getName() + "&7)", backpack.getItemMeta().getLore().toArray(new String[0]));
+            // Slimefun 5: read name and lore from the meta snapshot; either may be missing.
+            ItemMetaSnapshot snapshot = backpack.getItemMetaSnapshot();
+            String name = snapshot.getDisplayName().orElse(backpack.getItemId());
+            String[] lore = snapshot.getLore().map(l -> l.toArray(new String[0])).orElse(new String[0]);
+            SlimefunItemStack item = new SlimefunItemStack("DYED_" + backpack.getItemId() + "_" + color.name(), color.getTexture(), name + " &7(" + color.getName() + "&7)", lore);
             DyedBackpack dyed = new DyedBackpack(size, itemGroup, item, backpack, color);
             research.addItems(dyed);
             dyed.register(this);

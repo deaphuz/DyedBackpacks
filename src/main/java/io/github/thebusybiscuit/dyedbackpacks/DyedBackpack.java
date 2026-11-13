@@ -7,11 +7,11 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
-import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import io.github.thebusybiscuit.slimefun4.implementation.items.backpacks.SlimefunBackpack;
+import io.github.thebusybiscuit.slimefun5.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun5.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun5.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun5.api.recipes.RecipeType;
+import io.github.thebusybiscuit.slimefun5.implementation.items.backpacks.SlimefunBackpack;
 
 /**
  * This is our {@link SlimefunItem} implementation for the {@link DyedBackpack}.
@@ -52,7 +52,7 @@ public class DyedBackpack extends SlimefunBackpack {
         // @formatter:off
         return new ItemStack[] { 
             wool,    wool,     wool,
-            leather, backpack, leather,
+            leather, backpack.item(), leather,
             wool,    wool,     wool
         };
         // @formatter:on

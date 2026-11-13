@@ -1,5 +1,19 @@
 # DyedBackpacks
 A brand new Slimefun addon adding the ability to dye your beloved backpacks!
+
+> **Branch `slimefun5`: port to [Slimefun 5](https://github.com/Slimefun5/Slimefun5) (tested on Paper 26.3, Java 25).**
+> Changes against the Slimefun 4 version: package `io.github.thebusybiscuit.slimefun5`, Slimefun's own
+> `libraries.keys.NamespacedKey`, `CustomItemStack.create(...)`, `SlimefunUtils.getCustomHead(...)` instead of
+> `dough.skins`, `SlimefunItemStack#item()` in the recipe, and name/lore read from `getItemMetaSnapshot()`
+> (Slimefun 5 items may have no legacy lore).
+>
+> Build: Slimefun 5 is not published to a Maven repository, so install the jar from the
+> [Slimefun 5 releases](https://github.com/Slimefun5/Slimefun5/releases) locally first, then package:
+>
+> ```
+> mvn install:install-file -Dfile=Slimefun-5.3.3.jar -DgroupId=io.github.slimefun -DartifactId=Slimefun -Dversion=5.3.3 -Dpackaging=jar
+> mvn package
+> ```
 - Dye all your backpacks by using the wools with the wanted color.
 - Supports all 16 Minecraft default colors.
 - Extensive configuration options! Disable/Enable backpack coloring per level.
